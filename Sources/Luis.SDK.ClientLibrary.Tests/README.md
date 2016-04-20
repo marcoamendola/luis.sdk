@@ -1,0 +1,1 @@
+﻿To run tests, please rename SubscriptionKey.secret.sample to SubscriptionKey.secret updating it with your real subscription key.
