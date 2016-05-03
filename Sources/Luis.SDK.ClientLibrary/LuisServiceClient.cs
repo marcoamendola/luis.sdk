@@ -15,7 +15,13 @@ namespace Luis.Sdk
             AuthKey = "Ocp-Apim-Subscription-Key";
             AuthValue = subscriptionKey;
         }
+        
+
+        
+
 
     }
 
+
+    
 }

@@ -7,5 +7,7 @@ namespace Luis.Sdk
 {
     public interface ILuisServiceClient
     {
+
+
     }
 }
