@@ -6,6 +6,7 @@ using Luis.Sdk.Contract;
 using Ploeh.AutoFixture;
 using FluentAssertions;
 using System.Linq;
+using System.Globalization;
 
 namespace Luis.SDK.ClientLibrary.Tests
 {
@@ -21,7 +22,7 @@ namespace Luis.SDK.ClientLibrary.Tests
             {
                 try
                 {
-                   _sut.DeleteAppAsync(id).Wait();
+                    _sut.DeleteAppAsync(id).Wait();
                 }
                 catch { }
             }
@@ -32,14 +33,18 @@ namespace Luis.SDK.ClientLibrary.Tests
         {
             var countBefore = (await _sut.GetAppsAsync()).Length;
 
-            var app = _fixture.Create<App>();
-            await _sut.AddAppAsync(app);
-            _createdAppsIds.Add(app.ID);
+            var app = _fixture.Build<App>()
+                .Without(a => a.ID)
+                .With(a => a.Culture, new CultureInfo("it-it"))
+                .Create();
+
+            var newId = await _sut.AddAppAsync(app);
+            _createdAppsIds.Add(newId);
 
             var apps = await _sut.GetAppsAsync();
             apps.Length.Should().Be(countBefore + 1);
 
-            var added = apps.SingleOrDefault(a => a.ID == app.ID);
+            var added = apps.SingleOrDefault(a => a.ID == newId);
             added.Should().NotBeNull();
             added.ShouldBeEquivalentTo(app);
         }
@@ -49,16 +54,19 @@ namespace Luis.SDK.ClientLibrary.Tests
         {
             var countBefore = (await _sut.GetAppsAsync()).Length;
 
-            var app = _fixture.Create<App>();
-            await _sut.AddAppAsync(app);
-            _createdAppsIds.Add(app.ID);
-            
-            await _sut.DeleteAppAsync(app.ID);
+            var app = _fixture.Build<App>()
+                .With(a => a.Culture, new CultureInfo("it-it"))
+                .Create();
+
+            var newId = await _sut.AddAppAsync(app);
+            _createdAppsIds.Add(newId);
+
+            await _sut.DeleteAppAsync(newId);
 
             var apps = await _sut.GetAppsAsync();
             apps.Length.Should().Be(countBefore);
 
-            var deleted= apps.SingleOrDefault(a => a.ID == app.ID);
+            var deleted = apps.SingleOrDefault(a => a.ID == newId);
             deleted.Should().BeNull();
         }
 

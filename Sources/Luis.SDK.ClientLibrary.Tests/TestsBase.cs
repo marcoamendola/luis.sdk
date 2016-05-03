@@ -13,15 +13,19 @@ namespace Luis.SDK.ClientLibrary.Tests
 {
     public abstract class TestsBase
     {
-
+        static TestsBase()
+        {
+            //ignore SSL certificate errors in tests to allow Fiddler inspection
+            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+                (sender, certificate, chain, errors) => { return true; };
+        }
+        
         protected LuisServiceClient _sut;
-        protected Fixture _fixture;
-
+        protected Fixture _fixture = new Fixture();
+        
         [TestInitialize]
         public virtual void Initialize()
         {
-            var d = Directory.GetCurrentDirectory();
-            System.Diagnostics.Debug.Print(d);
             var key = File.ReadLines("SubscriptionKey.secret").FirstOrDefault();
             key.Should().NotBeNullOrWhiteSpace();
 

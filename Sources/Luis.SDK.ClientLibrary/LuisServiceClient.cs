@@ -17,9 +17,9 @@ namespace Luis.Sdk
             AuthValue = subscriptionKey;
         }
 
-        public async Task AddAppAsync(App app)
+        public async Task<string> AddAppAsync(App app)
         {
-            await this.PostAsync<App, Null>("apps", app);
+            return await this.PostAsync<App, string>("apps", app);
         }
 
         public async Task DeleteAppAsync(string appId)

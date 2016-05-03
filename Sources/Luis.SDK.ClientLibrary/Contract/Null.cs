@@ -9,9 +9,5 @@ namespace Luis.Sdk.Contract
     class Null
     {
         public static readonly Null Value = null;
-
-        private Null()
-        {
-        }
     }
 }

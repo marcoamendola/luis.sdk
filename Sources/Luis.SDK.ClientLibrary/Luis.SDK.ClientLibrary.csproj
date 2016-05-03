@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract\App.cs" />
+    <Compile Include="Contract\CultureInfoJsonConverter.cs" />
     <Compile Include="Contract\Null.cs" />
     <Compile Include="ILuisServiceClient.cs" />
     <Compile Include="LuisServiceClient.cs" />

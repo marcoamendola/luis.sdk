@@ -20,6 +20,7 @@ namespace Luis.Sdk
 
     public abstract class RestServiceClient : ServiceClient, IRestServiceClient
     {
+        
         protected async Task<TResponse> PutAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
         {
             return await SendAsync<TRequest, TResponse>(HttpMethod.Put, apiUrl, requestBody);
@@ -29,7 +30,7 @@ namespace Luis.Sdk
         {
             return await SendAsync<TRequest, TResponse>(HttpMethod.Delete, apiUrl, requestBody);
         }
-        
+
         #region IRestServiceClient implementation
 
         async Task<TResponse> IRestServiceClient.GetAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
