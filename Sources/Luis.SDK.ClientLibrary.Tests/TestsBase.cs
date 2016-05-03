@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Luis.Sdk;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ploeh.AutoFixture;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,17 +14,18 @@ namespace Luis.SDK.ClientLibrary.Tests
     public abstract class TestsBase
     {
 
-        protected LuisServiceClient sut;
+        protected LuisServiceClient _sut;
+        protected Fixture _fixture;
 
         [TestInitialize]
-        public void Initialize()
+        public virtual void Initialize()
         {
             var d = Directory.GetCurrentDirectory();
             System.Diagnostics.Debug.Print(d);
             var key = File.ReadLines("SubscriptionKey.secret").FirstOrDefault();
             key.Should().NotBeNullOrWhiteSpace();
 
-            sut = new LuisServiceClient(key);
+            _sut = new LuisServiceClient(key);
         }
     }
 }

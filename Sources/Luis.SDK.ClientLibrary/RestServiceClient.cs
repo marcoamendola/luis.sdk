@@ -29,8 +29,7 @@ namespace Luis.Sdk
         {
             return await SendAsync<TRequest, TResponse>(HttpMethod.Delete, apiUrl, requestBody);
         }
-
-
+        
         #region IRestServiceClient implementation
 
         async Task<TResponse> IRestServiceClient.GetAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
