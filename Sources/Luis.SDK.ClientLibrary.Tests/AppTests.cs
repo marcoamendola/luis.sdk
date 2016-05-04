@@ -49,7 +49,7 @@ namespace Luis.SDK.ClientLibrary.Tests
 
             const int SECONDS = 1000;
             added.CreatedDate.Should().BeCloseTo(DateTime.UtcNow, 5 * SECONDS);
-            added.ModifiedDate.Should().Be(added.CreatedDate);
+            added.ModifiedDate.Should().BeCloseTo(added.CreatedDate, 5 * SECONDS);
             added.PublishDate.Should().Be(DateTime.MinValue);
 
             added.Active.Should().BeTrue();
@@ -104,15 +104,25 @@ namespace Luis.SDK.ClientLibrary.Tests
             apps.Any(a => a.ID == newId).Should().BeFalse();
         }
 
+        [TestMethod]
+        public async Task Can_get_single_App()
+        {
+            var newId = await CreateNewApp();
+
+            var app = await _sut.GetAppAsync(newId);
+
+            app.Should().NotBeNull();
+            app.ID.Should().Be(newId);
+        }
 
         [TestMethod]
         public async Task Can_list_Apps()
         {
+            await CreateNewApp();
             var apps = (await _sut.GetAppsAsync()).ToArray();
             apps.Should().NotBeEmpty();
         }
-
-
+        
         private async Task<string> CreateNewApp()
         {
             var app = _fixture.Create<App>();

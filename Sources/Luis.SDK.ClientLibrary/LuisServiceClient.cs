@@ -26,6 +26,11 @@ namespace Luis.Sdk
         {
             await this.DeleteAsync<Null, Null>($"apps/{appId}", Null.Value);
         }
+        
+        public async Task<App> GetAppAsync(string appId)
+        {
+            return await this.GetAsync<Null, App>($"apps/{appId}", Null.Value);
+        }
 
         public async Task<App[]> GetAppsAsync()
         {

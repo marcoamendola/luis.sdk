@@ -10,7 +10,10 @@ namespace Luis.Sdk
     public interface ILuisServiceClient
     {
         Task<App[]> GetAppsAsync();
+        Task<App> GetAppAsync(string appId);
         Task<string> AddAppAsync(App app);
+        Task UpdateAppAsync(App app);
         Task DeleteAppAsync(string appId);
+        
     }
 }

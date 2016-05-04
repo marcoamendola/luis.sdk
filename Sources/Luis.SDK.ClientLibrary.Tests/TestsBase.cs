@@ -20,7 +20,7 @@ namespace Luis.SDK.ClientLibrary.Tests
                 (sender, certificate, chain, errors) => { return true; };
         }
 
-        protected LuisServiceClient _sut;
+        protected ILuisServiceClient _sut;
         protected Fixture _fixture = new Fixture();
 
         [TestInitialize]
