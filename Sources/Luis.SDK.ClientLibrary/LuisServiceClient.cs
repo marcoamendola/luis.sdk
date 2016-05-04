@@ -32,6 +32,10 @@ namespace Luis.Sdk
             return await this.GetAsync<Null, App[]>("apps", Null.Value);
         }
 
+        public async Task UpdateAppAsync(App app)
+        {
+            await this.PutAsync<App, Null>($"apps/{app.ID}", app);
+        }
     }
 
 }

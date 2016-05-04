@@ -49,7 +49,7 @@ namespace Luis.SDK.ClientLibrary.Tests
 
             const int SECONDS = 1000;
             added.CreatedDate.Should().BeCloseTo(DateTime.UtcNow, 5 * SECONDS);
-            added.ModifiedDate.Should().BeCloseTo(DateTime.UtcNow, 5 * SECONDS);
+            added.ModifiedDate.Should().Be(added.CreatedDate);
             added.PublishDate.Should().Be(DateTime.MinValue);
 
             added.Active.Should().BeTrue();
@@ -57,6 +57,38 @@ namespace Luis.SDK.ClientLibrary.Tests
             added.NumberOfEntities.Should().Be(0);
             added.NumberOfIntents.Should().Be(1);
             added.URL.ToString().Should().Contain(newId);
+        }
+
+
+        [TestMethod]
+        public async Task Can_update_an_App()
+        {
+            var appId = await CreateNewApp();
+
+            var app = _fixture.Freeze<App>();
+            app.ID = appId;
+            await _sut.UpdateAppAsync(app);
+
+            var apps = await _sut.GetAppsAsync();
+            var updated = apps.SingleOrDefault(a => a.ID == appId);
+            updated.Should().NotBeNull();
+
+            updated.ID.Should().Be(appId);
+            updated.Name.Should().Be(app.Name);
+            updated.Description.Should().Be(app.Description);
+            //updated.Culture.Should().Be(app.Culture); culture can't  change
+            updated.AuthKey.Should().Be(GetSubscriptionKey());
+
+            updated.ModifiedDate.Should()
+                .BeAtLeast(TimeSpan.FromSeconds(1))
+                .After(updated.CreatedDate);
+            updated.PublishDate.Should().Be(DateTime.MinValue);
+
+            updated.Active.Should().BeTrue();
+            updated.IsTrained.Should().BeFalse();
+            updated.NumberOfEntities.Should().Be(0);
+            updated.NumberOfIntents.Should().Be(1);
+            updated.URL.ToString().Should().Contain(appId);
         }
 
         [TestMethod]
