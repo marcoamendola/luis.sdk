@@ -19,7 +19,7 @@ namespace Luis.Sdk.Contract
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public DateTime PublishDate { get; set; }
-        public string URL { get; set; }
+        public Uri URL { get; set; }
         public string AuthKey { get; set; }
         public int NumberOfIntents { get; set; }
         public int NumberOfEntities { get; set; }
