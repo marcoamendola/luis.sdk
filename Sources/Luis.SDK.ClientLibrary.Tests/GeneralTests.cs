@@ -6,11 +6,11 @@ namespace Luis.SDK.ClientLibrary.Tests
     [TestClass]
     public class GeneralTests: TestsBase
     {
-     
+      
         [TestMethod]
-        public void can_create_client_instance()
+        public void Can_create_client_instance()
         {
-            //intentionally do nothing   
+            
         }
     }
 }
