@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Luis.Sdk;
+using Luis.SDK.ClientLibrary.Tests.Fixtures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ploeh.AutoFixture;
 using System;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Luis.SDK.ClientLibrary.Tests
 {
+
+
     public abstract class TestsBase
     {
         static TestsBase()
@@ -23,11 +26,18 @@ namespace Luis.SDK.ClientLibrary.Tests
         protected ILuisServiceClient _sut;
         protected Fixture _fixture = new Fixture();
 
+
+
         [TestInitialize]
         public virtual void Initialize()
         {
             var key = GetSubscriptionKey();
             _sut = new LuisServiceClient(key);
+        }
+        [TestCleanup]
+        public virtual void Cleanup()
+        {
+            
         }
 
         protected string GetSubscriptionKey()
@@ -44,7 +54,30 @@ namespace Luis.SDK.ClientLibrary.Tests
 
             return key;
         }
+
+
     }
 
 
+
+    public abstract class TestsBase<T> : TestsBase
+    {
+        protected ObjectRemover _remover;
+
+        [TestInitialize]
+        public override void Initialize()
+        {
+            base.Initialize();
+            _remover = new ObjectRemover(RemoveObject);
+        }
+
+        [TestCleanup]
+        public override void Cleanup()
+        {
+            base.Cleanup();
+            _remover.Dispose();
+        }
+              
+        protected abstract Task RemoveObject(string id);
+    }
 }

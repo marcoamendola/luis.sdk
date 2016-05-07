@@ -10,7 +10,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public void Can_create_client_instance()
         {
-            
+            //intentionally do nothing
         }
     }
 }

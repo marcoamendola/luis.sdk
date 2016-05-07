@@ -84,7 +84,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AppTests.cs" />
+    <Compile Include="EntitiesResourceTests.cs" />
+    <Compile Include="AppsResourceTests.cs" />
+    <Compile Include="Fixtures\EntityFixtures.cs" />
+    <Compile Include="Fixtures\AppFixtures.cs" />
+    <Compile Include="Fixtures\ObjectRemover.cs" />
     <Compile Include="GeneralTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestsBase.cs" />
