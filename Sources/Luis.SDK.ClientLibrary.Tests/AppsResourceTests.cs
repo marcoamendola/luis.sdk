@@ -12,7 +12,7 @@ using Luis.SDK.ClientLibrary.Tests.Fixtures;
 namespace Luis.SDK.ClientLibrary.Tests
 {
     [TestClass]
-    public class AppsResourceTests : TestsBase<App>
+    public class AppsResourceTests : TestsBase
     {
         [TestInitialize]
         public override void Initialize()

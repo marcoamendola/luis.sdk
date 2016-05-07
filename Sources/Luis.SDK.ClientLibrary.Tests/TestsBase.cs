@@ -23,22 +23,25 @@ namespace Luis.SDK.ClientLibrary.Tests
                 (sender, certificate, chain, errors) => { return true; };
         }
 
+        protected ObjectRemover _remover;
         protected ILuisServiceClient _sut;
         protected Fixture _fixture = new Fixture();
-
-
-
+        
         [TestInitialize]
         public virtual void Initialize()
         {
             var key = GetSubscriptionKey();
             _sut = new LuisServiceClient(key);
+            _remover = new ObjectRemover(RemoveObject);
         }
         [TestCleanup]
         public virtual void Cleanup()
         {
-            
+            _remover.Dispose();
         }
+
+        protected abstract Task RemoveObject(string id);
+
 
         protected string GetSubscriptionKey()
         {
@@ -59,25 +62,5 @@ namespace Luis.SDK.ClientLibrary.Tests
     }
 
 
-
-    public abstract class TestsBase<T> : TestsBase
-    {
-        protected ObjectRemover _remover;
-
-        [TestInitialize]
-        public override void Initialize()
-        {
-            base.Initialize();
-            _remover = new ObjectRemover(RemoveObject);
-        }
-
-        [TestCleanup]
-        public override void Cleanup()
-        {
-            base.Cleanup();
-            _remover.Dispose();
-        }
-              
-        protected abstract Task RemoveObject(string id);
-    }
+     
 }
