@@ -63,14 +63,12 @@ namespace Luis.SDK.ClientLibrary.Tests
         {
             var appId = await CreateTestApp();
 
-            var app = _fixture.Freeze<App>();
+            var app = _fixture.Create<App>();
             app.ID = appId;
             await _sut.UpdateAppAsync(app);
 
-            var apps = await _sut.GetAppsAsync();
-            var updated = apps.SingleOrDefault(a => a.ID == appId);
-            updated.Should().NotBeNull();
-
+            var updated = await _sut.GetAppAsync(appId);
+            
             updated.ID.Should().Be(appId);
             updated.Name.Should().Be(app.Name);
             updated.Description.Should().Be(app.Description);
@@ -114,6 +112,15 @@ namespace Luis.SDK.ClientLibrary.Tests
         }
 
         [TestMethod]
+        public void Should_throw_when_getting_unexisting_App()
+        {
+            var id = _fixture.Create<string>();
+
+            _sut.Awaiting(s => s.GetAppAsync(id))
+                .ShouldThrow<Microsoft.ProjectOxford.Common.ClientException>();
+        }
+
+        [TestMethod]
         public async Task Can_list_Apps()
         {
             await CreateTestApp();
@@ -123,7 +130,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         
         private async Task<string> CreateTestApp()
         {
-            var newId = await _fixture.CreateNewApp(_sut);
+            var newId = await _fixture.PersistNewApp(_sut);
             _remover.Register(newId);
             return newId;
         }

@@ -16,17 +16,17 @@ namespace Luis.SDK.ClientLibrary.Tests.Fixtures
     {
         public static void CustomizeEntityBuilder(this IFixture fixture)
         {
-            //fixture.Customize<Entity>(ob => ob
-            //    .With(x => x.ID, null)
-            //    .With(x => x.Culture, new CultureInfo("it-it"))
-            //);
+            fixture.Customize<Entity>(ob => ob
+                .Without(x => x.ID)
+                .Without(x => x.Type)
+            );
         }
 
-        public static async Task<string> CreateNewEntity(this IFixture fixture, ILuisServiceClient client)
+        public static async Task<string> PersistNewEntity(this IFixture fixture, ILuisServiceClient client)
         {
-            //var app = fixture.Create<Entity>();
-            //return await client.AddAppAsync(app);
-            return null;
+            var entity = fixture.Create<Entity>();
+            var appId = await fixture.EnsureTestApp(client);
+            return await client.AddEntityAsync(appId, entity);
         }
 
     }
