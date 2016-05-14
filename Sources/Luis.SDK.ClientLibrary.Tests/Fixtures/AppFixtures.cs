@@ -48,8 +48,6 @@ namespace Luis.SDK.ClientLibrary.Tests.Fixtures
             {
                 s_testAppId = app.ID;
             }
-
-            s_testAppId = await fixture.PersistNewApp(client, TEST_APP_NAME);
             return s_testAppId;
         }
     }

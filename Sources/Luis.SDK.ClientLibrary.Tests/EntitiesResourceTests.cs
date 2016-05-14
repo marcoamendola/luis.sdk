@@ -50,59 +50,61 @@ namespace Luis.SDK.ClientLibrary.Tests
         }
 
 
-        //[TestMethod]
-        //public async Task Can_rename_an_Entity()
-        //{
-        //    var entId = await _fixture.PersistNewEntity(_sut);
+        [TestMethod]
+        public async Task Can_rename_an_Entity()
+        {
+            var entId = await CreateTestEntity();
 
-        //    var newName = _fixture.Create<string>();
-        //    await _sut.RenameEntityAsync(entId, newName);
+            var newName = _fixture.Create<string>();
+            await _sut.RenameEntityAsync(_testAppId, entId, newName);
 
-        //    var updated = await _sut.GetEntityAsync(entId);
+            var updated = await _sut.GetEntityAsync(_testAppId, entId);
 
-        //    updated.Name.Should().Be(newName);            
-        //}
+            updated.Name.Should().Be(newName);
+        }
 
-        //[TestMethod]
-        //public async Task Can_delete_an_Entity()
-        //{
-        //    var countBefore = (await _sut.GetEntitiesAsync()).Length;
-        //    var newId = await _fixture.CreateNew(_sut);
+        [TestMethod]
+        public async Task Can_delete_an_Entity()
+        {
+            var countBefore = (await _sut.GetEntitiesAsync(_testAppId)).Length;
+            var newId = await CreateTestEntity();
 
-        //    await _sut.DeleteAppAsync(newId);
+            await _sut.DeleteEntityAsync(_testAppId, newId);
 
-        //    var apps = await _sut.GetAppsAsync();
-        //    apps.Length.Should().Be(countBefore);
-        //    apps.Any(a => a.ID == newId).Should().BeFalse();
-        //}
+            var entities = await _sut.GetEntitiesAsync(_testAppId);
+            entities.Length.Should().Be(countBefore);
+            entities.Any(e => e.ID == newId).Should().BeFalse();
+        }
 
-        //[TestMethod]
-        //public async Task Can_get_single_Entity()
-        //{
-        //    var newId = await _fixture.PersistNewApp(_sut);
+        [TestMethod]
+        public async Task Can_get_single_Entity()
+        {
+            var expected = _fixture.Freeze<Entity>();
+            var newId = await CreateTestEntity();
 
-        //    var app = await _sut.GetAppAsync(newId);
+            var entity = await _sut.GetEntityAsync(_testAppId, newId);
 
-        //    app.Should().NotBeNull();
-        //    app.ID.Should().Be(newId);
-        //}
+            entity.Should().NotBeNull();
+            entity.ID.Should().Be(newId);
+            entity.Name.Should().Be(expected.Name);
+        }
 
-        //[TestMethod]
-        //public void Should_throw_when_getting_unexisting_Entity()
-        //{
-        //    var id = _fixture.Create<string>();
+        [TestMethod]
+        public void Should_throw_when_getting_unexisting_Entity()
+        {
+            var id = _fixture.Create<string>();
 
-        //    _sut.Awaiting(s => s.GetEntityAsync(id))
-        //        .ShouldThrow<Microsoft.ProjectOxford.Common.ClientException>();
-        //}
+            _sut.Awaiting(s => s.GetEntityAsync(_testAppId, id))
+                .ShouldThrow<Microsoft.ProjectOxford.Common.ClientException>();
+        }
 
-        //[TestMethod]
-        //public async Task Can_list_Apps()
-        //{
-        //    await _fixture.PersistNewApp(_sut);
-        //    var apps = (await _sut.GetAppsAsync()).ToArray();
-        //    apps.Should().NotBeEmpty();
-        //}
+        [TestMethod]
+        public async Task Can_list_Entities()
+        {
+            await CreateTestEntity();
+            var apps = (await _sut.GetAppsAsync()).ToArray();
+            apps.Should().NotBeEmpty();
+        }
 
         private async Task<string> CreateTestEntity()
         {
