@@ -7,25 +7,23 @@ using Ploeh.AutoFixture;
 using FluentAssertions;
 using System.Linq;
 using System.Globalization;
+using Luis.SDK.ClientLibrary.Tests.Fixtures;
 
 namespace Luis.SDK.ClientLibrary.Tests
 {
     [TestClass]
-    public class AppTests : TestsBase
+    public class AppsResourceTests : TestsBase
     {
-        List<string> _createdAppsIds = new List<string>();
-
-        [TestCleanup]
-        public void Cleanup()
+        [TestInitialize]
+        public override void Initialize()
         {
-            foreach (var id in _createdAppsIds)
-            {
-                try
-                {
-                    _sut.DeleteAppAsync(id).Wait();
-                }
-                catch { }
-            }
+            base.Initialize();
+            _fixture.CustomizeAppBuilder();
+        }
+
+        protected async override Task RemoveObject(string id)
+        {
+            await _sut.DeleteAppAsync(id);
         }
 
         [TestMethod]
@@ -34,7 +32,7 @@ namespace Luis.SDK.ClientLibrary.Tests
             var countBefore = (await _sut.GetAppsAsync()).Length;
 
             var app = _fixture.Freeze<App>();
-            var newId = await CreateNewApp();
+            var newId = await CreateTestApp();
 
             var apps = await _sut.GetAppsAsync();
             apps.Length.Should().Be(countBefore + 1);
@@ -63,16 +61,14 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public async Task Can_update_an_App()
         {
-            var appId = await CreateNewApp();
+            var appId = await CreateTestApp();
 
-            var app = _fixture.Freeze<App>();
+            var app = _fixture.Create<App>();
             app.ID = appId;
             await _sut.UpdateAppAsync(app);
 
-            var apps = await _sut.GetAppsAsync();
-            var updated = apps.SingleOrDefault(a => a.ID == appId);
-            updated.Should().NotBeNull();
-
+            var updated = await _sut.GetAppAsync(appId);
+            
             updated.ID.Should().Be(appId);
             updated.Name.Should().Be(app.Name);
             updated.Description.Should().Be(app.Description);
@@ -95,7 +91,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         public async Task Can_delete_an_App()
         {
             var countBefore = (await _sut.GetAppsAsync()).Length;
-            var newId = await CreateNewApp();
+            var newId = await CreateTestApp();
 
             await _sut.DeleteAppAsync(newId);
 
@@ -107,7 +103,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public async Task Can_get_single_App()
         {
-            var newId = await CreateNewApp();
+            var newId = await CreateTestApp();
 
             var app = await _sut.GetAppAsync(newId);
 
@@ -116,21 +112,26 @@ namespace Luis.SDK.ClientLibrary.Tests
         }
 
         [TestMethod]
+        public void Should_throw_when_getting_unexisting_App()
+        {
+            var id = _fixture.Create<string>();
+
+            _sut.Awaiting(s => s.GetAppAsync(id))
+                .ShouldThrow<Microsoft.ProjectOxford.Common.ClientException>();
+        }
+
+        [TestMethod]
         public async Task Can_list_Apps()
         {
-            await CreateNewApp();
+            await CreateTestApp();
             var apps = (await _sut.GetAppsAsync()).ToArray();
             apps.Should().NotBeEmpty();
         }
         
-        private async Task<string> CreateNewApp()
+        private async Task<string> CreateTestApp()
         {
-            var app = _fixture.Create<App>();
-            app.ID = null;
-            app.Culture = new CultureInfo("it-it");
-
-            var newId = await _sut.AddAppAsync(app);
-            _createdAppsIds.Add(newId);
+            var newId = await _fixture.PersistNewApp(_sut);
+            _remover.Register(newId);
             return newId;
         }
     }

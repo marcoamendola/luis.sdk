@@ -14,6 +14,12 @@ namespace Luis.Sdk
         Task<string> AddAppAsync(App app);
         Task UpdateAppAsync(App app);
         Task DeleteAppAsync(string appId);
-        
+
+        Task<Entity[]> GetEntitiesAsync(string appId);
+        Task<Entity> GetEntityAsync(string appId, string entityId);
+        Task<string> AddEntityAsync(string appId, Entity entity);
+        Task RenameEntityAsync(string appId, string entityId, string newName);
+        Task DeleteEntityAsync(string appId, string entityId);
+
     }
 }
