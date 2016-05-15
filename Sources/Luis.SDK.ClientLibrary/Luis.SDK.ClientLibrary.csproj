@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Contract\App.cs" />
     <Compile Include="Contract\CultureInfoJsonConverter.cs" />
+    <Compile Include="Contract\Intent.cs" />
     <Compile Include="Contract\Entity.cs" />
     <Compile Include="Contract\Null.cs" />
     <Compile Include="ILuisServiceClient.cs" />

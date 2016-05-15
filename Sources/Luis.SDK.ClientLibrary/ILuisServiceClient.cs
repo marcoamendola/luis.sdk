@@ -21,5 +21,11 @@ namespace Luis.Sdk
         Task RenameEntityAsync(string appId, string entityId, string newName);
         Task DeleteEntityAsync(string appId, string entityId);
 
+        Task<Intent[]> GetIntentsAsync(string appId);
+        Task<Intent> GetIntentAsync(string appId, string intentId);
+        Task<string> AddIntentAsync(string appId, Intent intent);
+        Task RenameIntentAsync(string appId, string intentId, string newName);
+        Task DeleteIntentAsync(string appId, string intentId);
+
     }
 }

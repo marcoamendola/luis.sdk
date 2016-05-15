@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Luis.Sdk.Contract
 {
-    public class Entity
+    public class Intent
     {
         public string ID { get; set; }
         public string Name { get; set; }

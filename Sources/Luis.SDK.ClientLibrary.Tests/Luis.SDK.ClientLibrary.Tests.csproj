@@ -84,6 +84,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Fixtures\IntentFixtures.cs" />
+    <Compile Include="IntentsResourceTests.cs" />
     <Compile Include="EntitiesResourceTests.cs" />
     <Compile Include="AppsResourceTests.cs" />
     <Compile Include="Fixtures\EntityFixtures.cs" />

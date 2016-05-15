@@ -59,6 +59,28 @@ namespace Luis.Sdk
         {
             await this.DeleteAsync<Null, Null>($"apps/{appId}/entities/{entityId}", Null.Value);
         }
+
+        public async Task<Intent[]> GetIntentsAsync(string appId)
+        {
+            return await this.GetAsync<Null, Intent[]>($"apps/{appId}/intents", Null.Value); 
+        }
+        public async Task<Intent> GetIntentAsync(string appId, string intentId)
+        {
+            return await this.GetAsync<Null, Intent>($"apps/{appId}/intents/{intentId}", Null.Value);
+        }
+        public async Task<string> AddIntentAsync(string appId, Intent intent)
+        {
+            return await this.PostAsync<Intent, string>($"apps/{appId}/intents", intent);
+        }
+        public async Task RenameIntentAsync(string appId, string intentId, string newName)
+        {
+            await this.PutAsync<Intent, Null>($"apps/{appId}/intents/{intentId}",
+                new Intent { Name = newName });
+        }
+        public async Task DeleteIntentAsync(string appId, string intentId)
+        {
+            await this.DeleteAsync<Null, Null>($"apps/{appId}/intents/{intentId}", Null.Value);
+        }
     }
 
 }

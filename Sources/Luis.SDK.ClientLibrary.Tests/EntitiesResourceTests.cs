@@ -102,8 +102,8 @@ namespace Luis.SDK.ClientLibrary.Tests
         public async Task Can_list_Entities()
         {
             await CreateTestEntity();
-            var apps = (await _sut.GetAppsAsync()).ToArray();
-            apps.Should().NotBeEmpty();
+            var entities = (await _sut.GetEntitiesAsync(_testAppId)).ToArray();
+            entities.Should().NotBeEmpty();
         }
 
         private async Task<string> CreateTestEntity()
