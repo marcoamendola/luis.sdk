@@ -12,16 +12,23 @@ using Luis.SDK.ClientLibrary.Tests.Fixtures;
 namespace Luis.SDK.ClientLibrary.Tests
 {
     [TestClass]
-    public class AppsResourceTests : TestsBase
+    public class AppsResourceTests : TestClassBase
     {
+        private ObjectRemover _remover;
+
         [TestInitialize]
         public override void Initialize()
         {
             base.Initialize();
-            _fixture.CustomizeAppBuilder();
+            _remover = new ObjectRemover(RemoveApp);
+        }
+        [TestCleanup]
+        public virtual void Cleanup()
+        {
+            _remover.Dispose();
         }
 
-        protected async override Task RemoveObject(string id)
+        private async Task RemoveApp(string id)
         {
             await _sut.DeleteAppAsync(id);
         }

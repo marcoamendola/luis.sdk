@@ -84,7 +84,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ErrorLoggingLuisServiceClient.cs" />
+    <Compile Include="Fixtures\ActionFixtures.cs" />
+    <Compile Include="Fixtures\Fixtures.cs" />
     <Compile Include="Fixtures\IntentFixtures.cs" />
+    <Compile Include="ActionsResourceTests.cs" />
     <Compile Include="IntentsResourceTests.cs" />
     <Compile Include="EntitiesResourceTests.cs" />
     <Compile Include="AppsResourceTests.cs" />
@@ -93,7 +97,8 @@
     <Compile Include="Fixtures\ObjectRemover.cs" />
     <Compile Include="GeneralTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestsBase.cs" />
+    <Compile Include="TestClassWithAppBase.cs" />
+    <Compile Include="TestClassBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Luis.SDK.ClientLibrary\Luis.SDK.ClientLibrary.csproj">

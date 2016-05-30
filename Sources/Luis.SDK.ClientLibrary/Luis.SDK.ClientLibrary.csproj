@@ -38,6 +38,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contract\Action.cs" />
+    <Compile Include="Contract\ActionParameter.cs" />
     <Compile Include="Contract\App.cs" />
     <Compile Include="Contract\CultureInfoJsonConverter.cs" />
     <Compile Include="Contract\Intent.cs" />

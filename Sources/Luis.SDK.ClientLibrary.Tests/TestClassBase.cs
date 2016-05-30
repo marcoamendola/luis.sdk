@@ -14,34 +14,30 @@ namespace Luis.SDK.ClientLibrary.Tests
 {
 
 
-    public abstract class TestsBase
+    public abstract class TestClassBase
     {
-        static TestsBase()
+        static TestClassBase()
         {
             //ignore SSL certificate errors in tests to allow Fiddler inspection
             System.Net.ServicePointManager.ServerCertificateValidationCallback +=
                 (sender, certificate, chain, errors) => { return true; };
         }
 
-        protected ObjectRemover _remover;
         protected ILuisServiceClient _sut;
         protected Fixture _fixture = new Fixture();
         
         [TestInitialize]
         public virtual void Initialize()
         {
-            var key = GetSubscriptionKey();
-            _sut = new LuisServiceClient(key);
-            _remover = new ObjectRemover(RemoveObject);
+            var key = GetSubscriptionKey ();
+            _sut = new ErrorLoggingLuisServiceClient(key);
+            _fixture.Initialize();
         }
         [TestCleanup]
         public virtual void Cleanup()
         {
-            _remover.Dispose();
+            
         }
-
-        protected abstract Task RemoveObject(string id);
-
 
         protected string GetSubscriptionKey()
         {

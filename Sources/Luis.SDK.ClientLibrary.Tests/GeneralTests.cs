@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Luis.SDK.ClientLibrary.Tests.Fixtures;
 
 namespace Luis.SDK.ClientLibrary.Tests
 {
     [TestClass]
-    public class GeneralTests: TestsBase
+    public class GeneralTests : TestClassBase
     {
         [TestMethod]
         public void Can_create_client_instance()
         {
             //intentionally do nothing
         }
-        
-        protected override Task RemoveObject(string id)
+
+        [TestMethod]
+        public async Task Can_ensure_Test_App()
         {
-            throw new NotSupportedException();
+            await _fixture.EnsureTestApp(_sut);
         }
+
     }
 }

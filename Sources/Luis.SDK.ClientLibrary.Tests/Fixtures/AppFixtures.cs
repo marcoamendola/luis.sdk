@@ -14,7 +14,7 @@ namespace Luis.SDK.ClientLibrary.Tests.Fixtures
 
     public static class AppFixtures
     {
-        public static void CustomizeAppBuilder(this IFixture fixture)
+        public static void InitializeAppBuilder(IFixture fixture)
         {
             fixture.Customize<App>(ob => ob
                 .Without(x => x.ID)
@@ -29,9 +29,11 @@ namespace Luis.SDK.ClientLibrary.Tests.Fixtures
             return await client.AddAppAsync(app);
         }
 
-        public const string TEST_APP_NAME = "TestApp__ab0848e14aec4ccdad768aa08c221f8e";
-
+        public const string TEST_APP_NAME = "__TestApp";
         static string s_testAppId;
+        public static void InvalidateTestApp() {
+            s_testAppId = null;
+        }
         public static async Task<string> EnsureTestApp(this IFixture fixture, ILuisServiceClient client)
         {
             if (s_testAppId != null) return s_testAppId;
@@ -43,11 +45,18 @@ namespace Luis.SDK.ClientLibrary.Tests.Fixtures
             if (app == null)
             {
                 s_testAppId = await fixture.PersistNewApp(client, TEST_APP_NAME);
-            }
-            else
-            {
+
+            } else {
+
                 s_testAppId = app.ID;
+                await fixture.ClearTestActions(client, s_testAppId);
+                await fixture.ClearTestIntents(client, s_testAppId);
+                await fixture.ClearTestEntities(client, s_testAppId);
             }
+
+            await fixture.EnsureTestIntent(client, s_testAppId);
+            await fixture.EnsureTestEntities(client, s_testAppId);
+            
             return s_testAppId;
         }
     }
