@@ -12,32 +12,16 @@ using Luis.SDK.ClientLibrary.Tests.Fixtures;
 namespace Luis.SDK.ClientLibrary.Tests
 {
     [TestClass]
-    public class IntentsResourceTests : TestsBase
+    public class IntentsResourceTests : TestClassWithAppBase
     {
-        string _testAppId;
-        [TestInitialize]
-        public override void Initialize()
-        {
-            base.Initialize();
-            _fixture.CustomizeAppBuilder();
-            _fixture.CustomizeIntentBuilder();
-
-            _testAppId = _fixture.EnsureTestApp(_sut).Result;
-        }
-
-        protected async override Task RemoveObject(string id)
-        {
-            await _sut.DeleteIntentAsync(_testAppId, id);
-        }
-
-
+        
         [TestMethod]
         public async Task Can_create_an_Intent()
         {
             var countBefore = (await _sut.GetIntentsAsync(_testAppId)).Length;
 
             var intent = _fixture.Freeze<Intent>();
-            var newId = await CreateTestIntent();
+            var newId = await _fixture.PersistNewIntent(_sut);
 
             var intents = await _sut.GetIntentsAsync(_testAppId);
             intents.Length.Should().Be(countBefore + 1);
@@ -53,7 +37,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public async Task Can_rename_an_Intent()
         {
-            var intentId = await CreateTestIntent();
+            var intentId = await _fixture.PersistNewIntent(_sut);
 
             var newName = _fixture.Create<string>();
             await _sut.RenameIntentAsync(_testAppId, intentId, newName);
@@ -67,7 +51,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         public async Task Can_delete_an_Intent()
         {
             var countBefore = (await _sut.GetIntentsAsync(_testAppId)).Length;
-            var newId = await CreateTestIntent();
+            var newId = await _fixture.PersistNewIntent(_sut);
 
             await _sut.DeleteIntentAsync(_testAppId, newId);
 
@@ -80,8 +64,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         public async Task Can_get_single_Intent()
         {
             var expected = _fixture.Freeze<Intent>();
-            var newId = await CreateTestIntent();
-
+            var newId = await _fixture.PersistNewIntent(_sut); 
             var intent = await _sut.GetIntentAsync(_testAppId, newId);
 
             intent.Should().NotBeNull();
@@ -101,16 +84,11 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public async Task Can_list_Intents()
         {
-            await CreateTestIntent();
+            await _fixture.PersistNewIntent(_sut);
             var intents = (await _sut.GetIntentsAsync(_testAppId)).ToArray();
             intents.Should().NotBeEmpty();
         }
 
-        private async Task<string> CreateTestIntent()
-        {
-            var newId = await _fixture.PersistNewIntent(_sut);
-            _remover.Register(newId);
-            return newId;
-        }
+        
     }
 }

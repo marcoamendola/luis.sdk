@@ -20,37 +20,45 @@ namespace Luis.Sdk
 
     public abstract class RestServiceClient : ServiceClient, IRestServiceClient
     {
-        
-        protected async Task<TResponse> PutAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
-        {
-            return await SendAsync<TRequest, TResponse>(HttpMethod.Put, apiUrl, requestBody);
+        protected virtual new Task<TResponse> GetAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody) {
+            return base.GetAsync<TRequest, TResponse>(apiUrl, requestBody);
         }
 
-        protected async Task<TResponse> DeleteAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        protected virtual new Task<TResponse> PostAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
         {
-            return await SendAsync<TRequest, TResponse>(HttpMethod.Delete, apiUrl, requestBody);
+            return base.PostAsync<TRequest, TResponse>(apiUrl, requestBody);
+        }
+
+        protected virtual Task<TResponse> PutAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        {
+            return SendAsync<TRequest, TResponse>(HttpMethod.Put, apiUrl, requestBody);
+        }
+
+        protected virtual Task<TResponse> DeleteAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        {
+            return SendAsync<TRequest, TResponse>(HttpMethod.Delete, apiUrl, requestBody);
         }
 
         #region IRestServiceClient implementation
 
-        async Task<TResponse> IRestServiceClient.GetAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        Task<TResponse> IRestServiceClient.GetAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
         {
-            return await GetAsync<TRequest, TResponse>(apiUrl, requestBody);
+            return GetAsync<TRequest, TResponse>(apiUrl, requestBody);
         }
 
-        async Task<TResponse> IRestServiceClient.PostAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        Task<TResponse> IRestServiceClient.PostAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
         {
-            return await PostAsync<TRequest, TResponse>(apiUrl, requestBody);
+            return PostAsync<TRequest, TResponse>(apiUrl, requestBody);
         }
 
-        async Task<TResponse> IRestServiceClient.PutAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        Task<TResponse> IRestServiceClient.PutAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
         {
-            return await PutAsync<TRequest, TResponse>(apiUrl, requestBody);
+            return PutAsync<TRequest, TResponse>(apiUrl, requestBody);
         }
 
-        async Task<TResponse> IRestServiceClient.DeleteAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
+        Task<TResponse> IRestServiceClient.DeleteAsync<TRequest, TResponse>(string apiUrl, TRequest requestBody)
         {
-            return await DeleteAsync<TRequest, TResponse>(apiUrl, requestBody);
+            return DeleteAsync<TRequest, TResponse>(apiUrl, requestBody);
         }
 
         #endregion

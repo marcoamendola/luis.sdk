@@ -12,32 +12,16 @@ using Luis.SDK.ClientLibrary.Tests.Fixtures;
 namespace Luis.SDK.ClientLibrary.Tests
 {
     [TestClass]
-    public class EntitiesResourceTests : TestsBase
+    public class EntitiesResourceTests : TestClassWithAppBase
     {
-        string _testAppId;
-        [TestInitialize]
-        public override void Initialize()
-        {
-            base.Initialize();
-            _fixture.CustomizeAppBuilder();
-            _fixture.CustomizeEntityBuilder();
-
-            _testAppId = _fixture.EnsureTestApp(_sut).Result;
-        }
-
-        protected async override Task RemoveObject(string id)
-        {
-            await _sut.DeleteEntityAsync(_testAppId, id);
-        }
-
-
+        
         [TestMethod]
         public async Task Can_create_an_Entity()
         {
             var countBefore = (await _sut.GetEntitiesAsync(_testAppId)).Length;
 
             var entity = _fixture.Freeze<Entity>();
-            var newId = await CreateTestEntity();
+            var newId = await _fixture.PersistNewEntity(_sut);
 
             var entities = await _sut.GetEntitiesAsync(_testAppId);
             entities.Length.Should().Be(countBefore + 1);
@@ -53,7 +37,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public async Task Can_rename_an_Entity()
         {
-            var entId = await CreateTestEntity();
+            var entId = await _fixture.PersistNewEntity(_sut);
 
             var newName = _fixture.Create<string>();
             await _sut.RenameEntityAsync(_testAppId, entId, newName);
@@ -67,7 +51,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         public async Task Can_delete_an_Entity()
         {
             var countBefore = (await _sut.GetEntitiesAsync(_testAppId)).Length;
-            var newId = await CreateTestEntity();
+            var newId = await _fixture.PersistNewEntity(_sut);
 
             await _sut.DeleteEntityAsync(_testAppId, newId);
 
@@ -80,7 +64,7 @@ namespace Luis.SDK.ClientLibrary.Tests
         public async Task Can_get_single_Entity()
         {
             var expected = _fixture.Freeze<Entity>();
-            var newId = await CreateTestEntity();
+            var newId = await _fixture.PersistNewEntity(_sut);
 
             var entity = await _sut.GetEntityAsync(_testAppId, newId);
 
@@ -101,16 +85,10 @@ namespace Luis.SDK.ClientLibrary.Tests
         [TestMethod]
         public async Task Can_list_Entities()
         {
-            await CreateTestEntity();
+            await _fixture.PersistNewEntity(_sut);
             var entities = (await _sut.GetEntitiesAsync(_testAppId)).ToArray();
             entities.Should().NotBeEmpty();
         }
-
-        private async Task<string> CreateTestEntity()
-        {
-            var newId = await _fixture.PersistNewEntity(_sut);
-            _remover.Register(newId);
-            return newId;
-        }
+         
     }
 }

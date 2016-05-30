@@ -27,5 +27,10 @@ namespace Luis.Sdk
         Task RenameIntentAsync(string appId, string intentId, string newName);
         Task DeleteIntentAsync(string appId, string intentId);
 
+        Task<Contract.Action[]> GetActionsAsync(string appId);
+        Task<Contract.Action> GetActionAsync(string appId, string actionId);
+        Task<string> AddActionAsync(string appId, Contract.Action action);
+        Task UpdateActionAsync(string appId, Contract.Action action);
+        Task DeleteActionAsync(string appId, string actionId);
     }
 }

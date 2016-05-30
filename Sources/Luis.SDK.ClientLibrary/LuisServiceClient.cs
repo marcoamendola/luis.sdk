@@ -17,6 +17,7 @@ namespace Luis.Sdk
             AuthValue = subscriptionKey;
         }
 
+        #region App
         public async Task<App> GetAppAsync(string appId)
         {
             return await this.GetAsync<Null, App>($"apps/{appId}", Null.Value);
@@ -37,7 +38,9 @@ namespace Luis.Sdk
         {
             await this.DeleteAsync<Null, Null>($"apps/{appId}", Null.Value);
         }
+        #endregion
 
+        #region Entity
         public async Task<Entity> GetEntityAsync(string appId, string entityId)
         {
             return await this.GetAsync<Null, Entity>($"apps/{appId}/entities/{entityId}", Null.Value);
@@ -59,7 +62,9 @@ namespace Luis.Sdk
         {
             await this.DeleteAsync<Null, Null>($"apps/{appId}/entities/{entityId}", Null.Value);
         }
+        #endregion
 
+        #region Intent
         public async Task<Intent[]> GetIntentsAsync(string appId)
         {
             return await this.GetAsync<Null, Intent[]>($"apps/{appId}/intents", Null.Value); 
@@ -81,6 +86,30 @@ namespace Luis.Sdk
         {
             await this.DeleteAsync<Null, Null>($"apps/{appId}/intents/{intentId}", Null.Value);
         }
+        #endregion
+
+        #region Action
+        public async Task<Contract.Action[]> GetActionsAsync(string appId)
+        {
+            return await this.GetAsync<Null, Contract.Action[]>($"apps/{appId}/actions", Null.Value);
+        }
+        public async Task<Contract.Action> GetActionAsync(string appId, string actionId)
+        {
+            return await this.GetAsync<Null, Contract.Action>($"apps/{appId}/actions/{actionId}", Null.Value);
+        }
+        public async Task<string> AddActionAsync(string appId, Contract.Action action)
+        {
+            return await this.PostAsync<Contract.Action, string>($"apps/{appId}/actions", action);
+        }
+        public async Task UpdateActionAsync(string appId, Contract.Action action)
+        {
+            await this.PutAsync<Contract.Action, Null>($"apps/{appId}/actions/{action.ID}", action);
+        }
+        public async Task DeleteActionAsync(string appId, string actionId)
+        {
+            await this.DeleteAsync<Null, Null>($"apps/{appId}/actions/{actionId}", Null.Value);
+        }
+        #endregion
     }
 
 }
